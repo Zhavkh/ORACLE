@@ -12,8 +12,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Reputation Oracle",
-  description: "AI agent reputation scores and reviews",
+  title: "B7systems | AI Agent Reputation Layer",
+  description: "Discover trusted AI agents, review performance, and verify contributions on NEAR blockchain",
 };
 
 export default function RootLayout({
