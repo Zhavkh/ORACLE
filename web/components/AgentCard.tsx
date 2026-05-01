@@ -1,50 +1,39 @@
 import Link from "next/link";
 import type { AgentListItem } from "@/lib/api";
 import { StarAverage } from "@/components/Stars";
+import { AgentAvatar } from "@/components/AgentAvatar";
 
-function getBadges(agent: AgentListItem): string[] {
-  const badges: string[] = [];
-  if (agent.is_verified) badges.push("✅ Verified");
-  if (agent.reputation_score && agent.reputation_score >= 90) badges.push("🥇 Top Rated");
-  if (agent.review_count >= 10) badges.push("💬 Well Reviewed");
+function getBadges(agent: AgentListItem): { text: string; color: string }[] {
+  const badges: { text: string; color: string }[] = [];
+  if (agent.is_verified) badges.push({ text: "Verified", color: "#00ec97" });
+  if (agent.reputation_score && agent.reputation_score >= 90) badges.push({ text: "Top Rated", color: "#fbbf24" });
+  if (agent.review_count >= 10) badges.push({ text: "Popular", color: "#3b82f6" });
   return badges;
 }
 
 export function AgentCard({ agent }: { agent: AgentListItem }) {
-  const initials = agent.name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() || "")
-    .join("");
-  const hue = (agent.name.length * 37) % 360;
   const badges = getBadges(agent);
 
   return (
     <Link
       href={`/agents/${agent.id}`}
-      className="group fade-in block rounded-2xl border border-white/15 bg-white/5 px-4 py-4 backdrop-blur-xl transition-all duration-300 ease-out hover:border-[#00ec97]/50 hover:bg-white/10 hover:shadow-[0_0_40px_-20px_rgba(0,236,151,0.65)] sm:px-5 sm:py-5"
+      className="group fade-in block rounded-2xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-xl transition-all duration-300 ease-out hover:border-[#00ec97]/50 hover:bg-white/10 hover:shadow-[0_0_30px_-15px_rgba(0,236,151,0.5)] sm:px-5 sm:py-5"
     >
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div
-              className="flex h-10 w-10 items-center justify-center rounded-full text-xs font-semibold text-white"
-              style={{ backgroundColor: `hsl(${hue} 70% 42%)` }}
-            >
-              {initials || "AI"}
-            </div>
+            <AgentAvatar name={agent.name} category={agent.category} size={40} />
             <div>
-              <h2 className="text-base font-medium text-zinc-100 transition-colors duration-200 group-hover:text-white">
+              <h2 className="text-base font-medium text-white transition-colors duration-200">
                 {agent.name}
               </h2>
-              <p className="text-xs uppercase tracking-wider text-zinc-400">{agent.category}</p>
+              <p className="text-xs uppercase tracking-wider text-white/60">{agent.category}</p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-xs text-zinc-400">Reputation</p>
+            <p className="text-xs text-white/50">Reputation</p>
             <p className="text-sm font-semibold text-[#00ec97]">
-              {agent.reputation_score != null ? `${agent.reputation_score}/100` : "N/A"}
+              {agent.reputation_score != null ? `${Math.round(agent.reputation_score)}/100` : "N/A"}
             </p>
           </div>
         </div>
@@ -52,8 +41,16 @@ export function AgentCard({ agent }: { agent: AgentListItem }) {
         {badges.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {badges.map((badge, i) => (
-              <span key={i} className="rounded-full bg-white/10 px-2 py-1 text-xs text-zinc-300">
-                {badge}
+              <span 
+                key={i} 
+                className="rounded-full px-2 py-0.5 text-xs font-medium"
+                style={{ 
+                  backgroundColor: `${badge.color}20`,
+                  color: badge.color,
+                  border: `1px solid ${badge.color}40`
+                }}
+              >
+                {badge.text}
               </span>
             ))}
           </div>
@@ -62,10 +59,10 @@ export function AgentCard({ agent }: { agent: AgentListItem }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <StarAverage score={agent.average_score} />
-            <span className="text-xs text-zinc-500">({agent.review_count} reviews)</span>
+            <span className="text-xs text-white/50">({agent.review_count} reviews)</span>
           </div>
-          <span className="text-xs text-zinc-400">
-            {agent.near_wallet_id ? `Owner: ${agent.near_wallet_id.slice(0, 12)}...` : "No owner wallet"}
+          <span className="text-xs text-white/40">
+            {agent.near_wallet_id ? `${agent.near_wallet_id.slice(0, 8)}...` : "Anonymous developer"}
           </span>
         </div>
       </div>
