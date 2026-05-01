@@ -1,0 +1,16 @@
+.git
+contract
+data.json
+deploy*.js
+deploy*.py
+test-*.js
+__pycache__
+.vercel
+*.wasm
+node_modules
+*.lock
+LICENSE
+README.md
+.gitignore
+.vscode
+.idea
