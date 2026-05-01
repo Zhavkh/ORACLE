@@ -10,7 +10,6 @@ export default function HomePage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [q, setQ] = useState("");
   const [category, setCategory] = useState<AgentCategory | "all">("all");
-  const [minReputation, setMinReputation] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +20,7 @@ export default function HomePage() {
       setError(null);
       try {
         const [agentsData, statsData] = await Promise.all([
-          fetchAgents({ q, category, minReputation }),
+          fetchAgents({ q, category }),
           fetchStats()
         ]);
         if (active) {
@@ -42,7 +41,7 @@ export default function HomePage() {
     return () => {
       active = false;
     };
-  }, [q, category, minReputation]);
+  }, [q, category]);
 
   return (
     <div className="space-y-10">
@@ -53,10 +52,10 @@ export default function HomePage() {
           <p className="text-xs uppercase tracking-[0.3em] text-[#00ec97]">NEAR + AI</p>
         </div>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-          The Reputation Layer for AI Agents
-        </h1>
-        <p className="mt-3 max-w-3xl text-zinc-300">
           Discover trusted agents, review performance, and sign every contribution with a NEAR wallet.
+        </h1>
+        <p className="mt-4 text-sm text-zinc-400">
+          The Reputation Layer for AI Agents
         </p>
         
         {loading ? (
@@ -103,18 +102,6 @@ export default function HomePage() {
           <option value="analytics">Analytics</option>
           <option value="other">Other</option>
         </select>
-        <div className="rounded-lg border border-white/10 bg-black/30 px-3 py-2">
-          <label className="mb-1 block text-xs text-zinc-400">Min reputation: {minReputation}</label>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            step={5}
-            value={minReputation}
-            onChange={(e) => setMinReputation(Number(e.target.value))}
-            className="w-full accent-[#00ec97]"
-          />
-        </div>
       </section>
 
       {error ? <p className="text-sm text-red-400">{error}</p> : null}
