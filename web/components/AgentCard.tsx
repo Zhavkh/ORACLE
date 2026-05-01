@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { AgentListItem } from "@/lib/api";
 import { StarAverage } from "@/components/Stars";
-import { AgentAvatar } from "@/components/AgentAvatar";
+import { AgentAvatar } from "./AgentAvatar";
 
 function getBadges(agent: AgentListItem): { text: string; color: string }[] {
   const badges: { text: string; color: string }[] = [];
