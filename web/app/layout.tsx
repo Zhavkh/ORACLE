@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Header } from "@/components/Header";
 import { NearWalletProvider } from "@/components/NearWalletProvider";
@@ -14,6 +14,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "B7systems | AI Agent Reputation Layer",
   description: "Discover trusted AI agents, review performance, and verify contributions on NEAR blockchain",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
