@@ -42,7 +42,7 @@ export async function GET(request: Request) {
       query += `&category=eq.${category}`;
     }
     
-    query += '&order=reputation_score.desc';
+    query += '&order=created_at.desc';
     
     const agents = await supabaseRequest(query);
     
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
           near_wallet_id: agent.near_wallet_id,
           category: agent.category,
           average_score: avgScore ? Math.round(avgScore * 10) / 10 : null,
-          reputation_score: agent.reputation_score || 0,
+          reputation_score: 0,
           is_verified: agent.is_verified || false,
           review_count: reviews.length,
         };
