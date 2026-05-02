@@ -42,8 +42,6 @@ export async function GET(request: Request) {
       query += `&category=eq.${category}`;
     }
     
-    query += '&order=created_at.desc';
-    
     const agents = await supabaseRequest(query);
     
     // Get review counts for each agent
