@@ -19,7 +19,8 @@ async function supabaseRequest(endpoint: string, options: RequestInit = {}) {
   });
   
   if (!res.ok) {
-    throw new Error(`Supabase error: ${res.status}`);
+    const text = await res.text();
+    throw new Error(`Supabase error: ${res.status} - ${text}`);
   }
   
   return res.json();
@@ -69,6 +70,10 @@ export async function GET(request: Request) {
     return NextResponse.json(agentsWithReviews);
   } catch (error: any) {
     console.error('API Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ 
+      error: error.message,
+      urlConfigured: !!SUPABASE_URL,
+      keyConfigured: !!SUPABASE_ANON_KEY
+    }, { status: 500 });
   }
 }
