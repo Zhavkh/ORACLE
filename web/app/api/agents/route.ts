@@ -31,7 +31,7 @@ export async function GET(request: Request) {
     const q = searchParams.get('q');
     const category = searchParams.get('category');
     
-    let query = 'agents?select=*&is_active=eq.true';
+    let query = 'agents?select=*';
     
     if (q) {
       query += `&name=ilike.*${q}*`;
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
     // Get review counts for each agent
     const agentsWithReviews = await Promise.all(
       agents.map(async (agent: any) => {
-        const reviews = await supabaseRequest(`reviews?agent_id=eq.${agent.id}&select=score`);
+        const reviews = await supabaseRequest('reviews?agent_id=eq.' + agent.id + '&select=score');
         const avgScore = reviews.length > 0 
           ? reviews.reduce((sum: number, r: any) => sum + r.score, 0) / reviews.length 
           : null;

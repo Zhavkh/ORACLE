@@ -26,7 +26,7 @@ async function supabaseRequest(endpoint: string) {
 export async function GET() {
   try {
     const [agents, reviews] = await Promise.all([
-      supabaseRequest('agents?select=id,is_verified&is_active=eq.true'),
+      supabaseRequest('agents?select=id,is_verified'),
       supabaseRequest('reviews?select=score'),
     ]);
     
