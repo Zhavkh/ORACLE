@@ -16,7 +16,7 @@ export async function GET(
     
     // Fetch reviews for this agent
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/reviews?agent_id=eq.${agentId}&select=created_at,score,reviewer_id&order=created_at.desc`,
+      `${SUPABASE_URL}/rest/v1/reviews?agent_id=eq.${agentId}&select=created_at,score,wallet_id&order=created_at.desc`,
       {
         headers: {
           'apikey': SUPABASE_ANON_KEY,
@@ -36,7 +36,7 @@ export async function GET(
     const history = reviews.map((review: any) => ({
       date: review.created_at,
       score: review.score,
-      reviewer: review.reviewer_id,
+      reviewer: review.wallet_id,
     }));
     
     return NextResponse.json(history);
