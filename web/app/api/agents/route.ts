@@ -55,6 +55,7 @@ export async function GET(request: Request) {
         return {
           id: agent.id,
           name: agent.name,
+          description: agent.description,
           near_wallet_id: agent.near_wallet_id,
           category: agent.category,
           average_score: avgScore ? Math.round(avgScore * 10) / 10 : null,

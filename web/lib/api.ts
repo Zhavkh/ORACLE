@@ -8,6 +8,7 @@ export type AgentListItem = {
   name: string;
   near_wallet_id: string | null;
   category: AgentCategory;
+  description: string | null;
   average_score: number | null;
   reputation_score: number | null;
   is_verified: boolean;
