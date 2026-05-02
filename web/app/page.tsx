@@ -53,10 +53,10 @@ export default function HomePage() {
           <p className="text-xs uppercase tracking-[0.3em] text-[#00ec97]">NEAR + AI</p>
         </div>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-          Discover trusted agents, review performance, and sign every contribution with a NEAR wallet.
+          Rate. Verify. Trust.
         </h1>
         <p className="mt-4 text-sm text-zinc-400">
-          The Reputation Layer for AI Agents
+          Review agents. Build trust. Sign with NEAR.
         </p>
         
         {loading ? (
