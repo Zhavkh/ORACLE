@@ -178,7 +178,7 @@ export default function AboutPage() {
         </p>
         <div className="mt-6 flex gap-4">
           <a 
-            href="https://github.com/Zhavkh" 
+            href="https://github.com/Zhavkh/ORACLE" 
             target="_blank" 
             rel="noopener noreferrer"
             className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white transition-colors hover:bg-white/10"
@@ -186,7 +186,7 @@ export default function AboutPage() {
             GitHub
           </a>
           <a 
-            href="https://t.me/zhavkh" 
+            href="https://t.me/b7systems" 
             target="_blank" 
             rel="noopener noreferrer"
             className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white transition-colors hover:bg-white/10"

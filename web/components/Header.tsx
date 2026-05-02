@@ -23,6 +23,12 @@ export function Header() {
             Agents
           </Link>
           <Link
+            href="/about"
+            className="hidden transition-colors duration-200 hover:text-[#00ec97] sm:block"
+          >
+            About
+          </Link>
+          <Link
             href="/leaderboard"
             className="transition-colors duration-200 hover:text-[#00ec97]"
           >
