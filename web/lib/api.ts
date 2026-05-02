@@ -1,6 +1,5 @@
 export const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL ??
-  "https://b7systems.vercel.app";
+  (process.env.NEXT_PUBLIC_API_URL ?? "https://b7systems.vercel.app") + "/api";
 
 export type AgentCategory = "trading" | "chat" | "analytics" | "other";
 
