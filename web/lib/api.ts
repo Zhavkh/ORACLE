@@ -50,6 +50,7 @@ export type AgentProfile = {
   name: string;
   description: string;
   near_wallet_id: string | null;
+  owner_wallet_id: string | null;
   category: AgentCategory;
   reviews: Review[];
   average_score: number | null;

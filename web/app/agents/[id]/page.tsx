@@ -74,7 +74,7 @@ export default function AgentProfilePage() {
       : 0;
 
   const badges = getBadges(agent);
-  const isOwner = walletId && agent.near_wallet_id === walletId;
+  const isOwner = walletId && agent.owner_wallet_id === walletId;
 
   return (
     <div className="space-y-10">
@@ -90,11 +90,6 @@ export default function AgentProfilePage() {
             <h1 className="text-2xl font-medium tracking-tight text-zinc-50 sm:text-3xl">
               {agent.name}
             </h1>
-            {agent.is_verified && (
-              <span className="rounded-full bg-green-500/20 px-2 py-1 text-xs text-green-400">
-                ✓ Verified
-              </span>
-            )}
           </div>
           
           {badges.length > 0 && (
@@ -111,11 +106,15 @@ export default function AgentProfilePage() {
             <span className="rounded-full border border-[#00ec97]/40 px-2 py-1 text-[#00ec97]">
               {agent.category}
             </span>
-            {agent.near_wallet_id ? (
-              <span className="rounded-full border border-white/20 px-2 py-1 text-zinc-300">
-                owner: {agent.near_wallet_id}
+            {agent.owner_wallet_id ? (
+              <span className="rounded-full border border-[#00ec97]/40 px-2 py-1 text-[#00ec97]">
+                owner: {agent.owner_wallet_id}
               </span>
-            ) : null}
+            ) : (
+              <span className="rounded-full border border-white/20 px-2 py-1 text-zinc-500">
+                owner: anonymous
+              </span>
+            )}
           </div>
           {agent.description ? (
             <p className="text-sm leading-relaxed text-zinc-400">{agent.description}</p>

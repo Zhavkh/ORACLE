@@ -51,10 +51,13 @@ export async function GET(
       `reviews?agent_id=eq.${agentId}&select=id,score,comment,reviewer_wallet_id`
     );
     
-    // Calculate average score
+    // Calculate average score and reputation
     const avgScore = reviews.length > 0
       ? reviews.reduce((sum: number, r: any) => sum + r.score, 0) / reviews.length
       : null;
+    
+    // Reputation: 0-100 scale based on average (5-star max = 100)
+    const reputationScore = avgScore ? Math.round(avgScore * 20) : 0;
     
     return NextResponse.json({
       id: agent.id,
@@ -66,7 +69,7 @@ export async function GET(
       is_verified: agent.is_verified || false,
       average_score: avgScore ? Math.round(avgScore * 10) / 10 : null,
       review_count: reviews.length,
-      reputation_score: 0,
+      reputation_score: reputationScore,
       reviews: reviews.map((r: any) => ({
         id: r.id,
         score: r.score,
