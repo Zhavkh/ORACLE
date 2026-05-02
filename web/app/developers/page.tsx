@@ -137,8 +137,8 @@ export default function DevelopersPage() {
           <div className="mt-4 space-y-4">
             <div>
               <p className="text-xs uppercase tracking-wider text-zinc-500">Base URL</p>
-              <code className="mt-1 block rounded bg-black/50 p-2 text-xs text-zinc-300">
-                https://reputation-oracle-api.vercel.app
+              <code className="mt-1 block rounded bg-black/50 p-2 text-xs text-[#00ec97]">
+                https://b7systems.vercel.app
               </code>
             </div>
 
@@ -171,7 +171,78 @@ export default function DevelopersPage() {
                   <code className="rounded bg-black/50 px-1 text-zinc-300">GET /leaderboard</code>
                   <span className="ml-2">Top agents</span>
                 </li>
+                <li>
+                  <code className="rounded bg-black/50 px-1 text-zinc-300">POST /agents/register</code>
+                  <span className="ml-2">Register new agent</span>
+                </li>
+                <li>
+                  <code className="rounded bg-black/50 px-1 text-zinc-300">POST /agents/{"{id}"}/review</code>
+                  <span className="ml-2">Submit review</span>
+                </li>
               </ul>
+            </div>
+
+            <div className="mt-6 rounded-lg border border-white/10 bg-black/50 p-4">
+              <p className="text-xs uppercase tracking-wider text-zinc-500 mb-3">Example: List Agents</p>
+              <p className="text-xs text-zinc-400 mb-2">Request:</p>
+              <code className="block rounded bg-black/70 p-2 text-xs text-zinc-300 mb-3">
+                GET /agents?q=trader&category=trading
+              </code>
+              <p className="text-xs text-zinc-400 mb-2">Response:</p>
+              <pre className="block rounded bg-black/70 p-2 text-xs text-zinc-300 overflow-x-auto">
+{`[
+  {
+    "id": "uuid",
+    "name": "gpt_trader_v2",
+    "category": "trading",
+    "average_score": 4.5,
+    "reputation_score": 90,
+    "is_verified": true,
+    "review_count": 24
+  }
+]`}
+              </pre>
+            </div>
+
+            <div className="mt-4 rounded-lg border border-white/10 bg-black/50 p-4">
+              <p className="text-xs uppercase tracking-wider text-zinc-500 mb-3">Example: Submit Review</p>
+              <p className="text-xs text-zinc-400 mb-2">Request:</p>
+              <pre className="block rounded bg-black/70 p-2 text-xs text-zinc-300 overflow-x-auto mb-3">
+{`POST /agents/uuid/review
+Content-Type: application/json
+
+{
+  "score": 5,
+  "comment": "Exceptional performance!",
+  "reviewer_wallet_id": "alice.near"
+}`}
+              </pre>
+              <p className="text-xs text-zinc-400 mb-2">Response:</p>
+              <code className="block rounded bg-black/70 p-2 text-xs text-zinc-300">
+                200 OK
+              </code>
+            </div>
+
+            <div className="mt-4 rounded-lg border border-white/10 bg-black/50 p-4">
+              <p className="text-xs uppercase tracking-wider text-zinc-500 mb-3">Example: JavaScript Client</p>
+              <pre className="block rounded bg-black/70 p-2 text-xs text-zinc-300 overflow-x-auto">
+{`// Fetch agents
+const response = await fetch(
+  'https://b7systems.vercel.app/agents'
+);
+const agents = await response.json();
+
+// Submit review
+await fetch('https://b7systems.vercel.app/agents/ID/review', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    score: 5,
+    comment: 'Great agent!',
+    reviewer_wallet_id: 'alice.near'
+  })
+});`}
+              </pre>
             </div>
           </div>
         </section>
