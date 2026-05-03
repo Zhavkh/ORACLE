@@ -167,18 +167,18 @@ export default function AgentProfilePage() {
             Reputation History
           </h2>
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <div className="space-y-2">
-              {history.slice(0, 10).map((h) => (
-                <div key={h.id} className="flex items-center justify-between text-sm">
-                  <span className="text-zinc-400">
-                    {h.timestamp ? new Date(h.timestamp).toLocaleDateString() : "Unknown"}
+            <div className="space-y-3">
+              {history.slice(0, 10).map((h: any, i: number) => (
+                <div key={i} className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-3">
+                    <Stars value={h.score} size="sm" />
+                    <span className="text-zinc-400">
+                      {h.date ? new Date(h.date).toLocaleDateString() : "Unknown"}
+                    </span>
+                  </div>
+                  <span className="text-xs text-[#00ec97]">
+                    {h.reviewer || 'Anonymous'}
                   </span>
-                  <span className="text-zinc-300">
-                    {h.old_score !== null ? `${h.old_score} → ${h.new_score}` : "Verified"}
-                  </span>
-                  {h.tx_hash && (
-                    <span className="text-xs text-zinc-600">{h.tx_hash.slice(0, 20)}...</span>
-                  )}
                 </div>
               ))}
             </div>
