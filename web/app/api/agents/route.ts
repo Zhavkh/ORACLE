@@ -51,6 +51,9 @@ export async function GET(request: Request) {
         const avgScore = reviews.length > 0 
           ? reviews.reduce((sum: number, r: any) => sum + r.score, 0) / reviews.length 
           : null;
+        
+        // Reputation: 0-100 scale based on average (5-star max = 100)
+        const reputationScore = avgScore ? Math.round(avgScore * 20) : 0;
           
         return {
           id: agent.id,
@@ -59,7 +62,7 @@ export async function GET(request: Request) {
           near_wallet_id: agent.near_wallet_id,
           category: agent.category,
           average_score: avgScore ? Math.round(avgScore * 10) / 10 : null,
-          reputation_score: 0,
+          reputation_score: reputationScore,
           is_verified: agent.is_verified || false,
           review_count: reviews.length,
         };
