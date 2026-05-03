@@ -70,7 +70,7 @@ export function AgentCard({ agent }: { agent: AgentListItem }) {
             <span className="text-xs text-white/50">({agent.review_count} reviews)</span>
           </div>
           <span className="text-xs text-white/40">
-            {agent.near_wallet_id ? `${agent.near_wallet_id.slice(0, 8)}...` : "Anonymous developer"}
+            {agent.owner_wallet_id ? agent.owner_wallet_id : "Anonymous developer"}
           </span>
         </div>
       </div>

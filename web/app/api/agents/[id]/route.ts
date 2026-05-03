@@ -48,7 +48,7 @@ export async function GET(
     
     // Fetch reviews for this agent
     const reviews = await supabaseRequest(
-      `reviews?agent_id=eq.${agentId}&select=id,score,comment,reviewer_wallet_id`
+      `reviews?agent_id=eq.${agentId}&select=id,score,comment,reviewer_wallet_id,created_at`
     );
     
     // Calculate average score and reputation
@@ -75,6 +75,7 @@ export async function GET(
         score: r.score,
         comment: r.comment,
         reviewer_wallet_id: r.reviewer_wallet_id,
+        created_at: r.created_at,
       })),
     });
   } catch (error: any) {

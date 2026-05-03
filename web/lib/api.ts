@@ -7,6 +7,7 @@ export type AgentListItem = {
   id: string;
   name: string;
   near_wallet_id: string | null;
+  owner_wallet_id: string | null;
   category: AgentCategory;
   description: string | null;
   average_score: number | null;
