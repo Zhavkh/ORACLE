@@ -67,6 +67,8 @@ export async function GET(
       near_wallet_id: agent.near_wallet_id,
       owner_wallet_id: agent.owner_wallet_id,
       is_verified: agent.is_verified || false,
+      status: agent.status || 'pending',
+      pending: agent.status === 'pending',
       average_score: avgScore ? Math.round(avgScore * 10) / 10 : null,
       review_count: reviews.length,
       reputation_score: reputationScore,

@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     const q = searchParams.get('q');
     const category = searchParams.get('category');
     
-    let query = 'agents?select=*';
+    let query = 'agents?select=*&status=eq.approved';
     
     if (q) {
       query += `&name=ilike.*${q}*`;
@@ -73,6 +73,52 @@ export async function GET(request: Request) {
     return NextResponse.json(agentsWithReviews);
   } catch (error: any) {
     console.error('API Error:', error);
+    return NextResponse.json({ 
+      error: error.message,
+      urlConfigured: !!SUPABASE_URL,
+      keyConfigured: !!SUPABASE_ANON_KEY
+    }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { name, description, near_wallet_id, category, owner_email } = body;
+
+    // Validation
+    if (!name?.trim() || !description?.trim() || !category) {
+      return NextResponse.json(
+        { error: "Missing required fields: name, description, category" },
+        { status: 400 }
+      );
+    }
+
+    // Create agent with pending status
+    const agentData = {
+      name: name.trim(),
+      description: description.trim(),
+      near_wallet_id,
+      category,
+      owner_email: owner_email || null,
+      status: 'pending', // New agents start as pending
+      is_verified: false,
+    };
+
+    const agent = await supabaseRequest('agents', {
+      method: 'POST',
+      body: JSON.stringify(agentData),
+    });
+
+    return NextResponse.json({
+      id: agent.id,
+      name: agent.name,
+      description: agent.description,
+      near_wallet_id: agent.near_wallet_id,
+      category: agent.category,
+    });
+  } catch (error: any) {
+    console.error('Registration error:', error);
     return NextResponse.json({ 
       error: error.message,
       urlConfigured: !!SUPABASE_URL,

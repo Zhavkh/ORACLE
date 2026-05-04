@@ -111,6 +111,7 @@ export async function registerAgent(body: {
   description: string;
   near_wallet_id: string | null;
   category: AgentCategory;
+  owner_email?: string;
 }): Promise<{
   id: string;
   name: string;

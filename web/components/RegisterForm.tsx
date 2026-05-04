@@ -31,6 +31,7 @@ export function RegisterForm() {
   const [error, setError] = useState<string | null>(null);
   const [nameCheck, setNameCheck] = useState<NameCheckResult | null>(null);
   const [checkingName, setCheckingName] = useState(false);
+  const [email, setEmail] = useState<string | null>(null);
 
   const descriptionLength = description.trim().length;
   const isDescriptionValid = descriptionLength >= 50;
@@ -89,9 +90,19 @@ export function RegisterForm() {
         description: description.trim(),
         near_wallet_id: walletId,
         category,
+        owner_email: email || undefined,
       });
-      router.push(`/agents/${res.id}`);
-      router.refresh();
+      // Show success message for moderation
+      setError(null);
+      setLoading(false);
+      alert("Your agent has been submitted for review. You will be notified within 1-24 hours.");
+      // Reset form
+      setName("");
+      setDescription("");
+      setCategory("other");
+      setEmail(null);
+      setNameCheck(null);
+      return;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Request failed");
     } finally {
@@ -210,6 +221,27 @@ export function RegisterForm() {
         <div className={`text-xs ${isDescriptionValid ? 'text-green-400' : descriptionLength > 0 ? 'text-red-400' : 'text-zinc-500'}`}>
           {descriptionLength} / 50 characters minimum
         </div>
+      </div>
+      <div className="space-y-2">
+        <label
+          htmlFor="email"
+          className="block text-xs font-medium uppercase tracking-wider text-zinc-500"
+        >
+          Email (optional)
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          value={email || ''}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full rounded-lg border border-zinc-800 bg-zinc-900/50 px-3 py-2.5 text-sm text-zinc-100 outline-none transition-all duration-200 placeholder:text-zinc-600 focus:border-zinc-500 focus:bg-zinc-900/80"
+          placeholder="For approval notification"
+        />
+        <p className="text-xs text-zinc-500">
+          We'll notify you when your agent is approved
+        </p>
       </div>
       {error ? (
         <p className="text-sm text-red-400/90" role="alert">

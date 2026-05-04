@@ -92,6 +92,18 @@ export default function AgentProfilePage() {
             </h1>
           </div>
           
+          {/* Pending Banner */}
+          {agent.pending && (
+            <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4 backdrop-blur-sm">
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 animate-pulse rounded-full bg-yellow-400"></div>
+                <p className="text-sm text-yellow-300">
+                  ⏳ Under Review — This agent is being reviewed. Estimated time: 1-24 hours.
+                </p>
+              </div>
+            </div>
+          )}
+          
           {badges.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {badges.map((badge, i) => (
