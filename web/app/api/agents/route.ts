@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     const q = searchParams.get('q');
     const category = searchParams.get('category');
     
-    let query = 'agents?select=*&status=eq.approved';
+    let query = 'agents?select=*';
     
     if (q) {
       query += `&name=ilike.*${q}*`;
