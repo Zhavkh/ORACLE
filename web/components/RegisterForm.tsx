@@ -240,7 +240,7 @@ export function RegisterForm() {
           placeholder="For approval notification"
         />
         <p className="text-xs text-zinc-500">
-          We'll notify you when your agent is approved
+  placeholder="You will be notified when your agent is approved"
         </p>
       </div>
       {error ? (
