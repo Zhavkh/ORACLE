@@ -6,14 +6,20 @@
       "use": "@vercel/python",
       "config": {
         "maxDuration": 30,
-        "regions": ["iad1"]
+        "regions": [
+          "iad1"
+        ]
       }
     }
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "/main.py/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "main.py"
+      "dest": "/main.py/$1"
     }
   ]
 }
