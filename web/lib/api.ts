@@ -58,6 +58,7 @@ export type AgentProfile = {
   reputation_score: number | null;
   is_verified: boolean;
   review_count: number;
+  pending?: boolean;
 };
 
 async function parseJson<T>(res: Response): Promise<T> {
