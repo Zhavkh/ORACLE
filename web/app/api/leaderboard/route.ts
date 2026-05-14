@@ -1,25 +1,27 @@
 import { NextResponse } from 'next/server';
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+export const dynamic = 'force-dynamic';
 
 async function supabaseRequest(endpoint: string) {
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     throw new Error('Supabase not configured');
   }
-  
+
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
     headers: {
       'apikey': SUPABASE_ANON_KEY,
       'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
     },
   });
-  
+
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`Supabase error: ${res.status} - ${text}`);
   }
-  
+
   return res.json();
 }
 
@@ -27,21 +29,17 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '10', 10);
-    
-    // Get agents with reviews
+
     const agents = await supabaseRequest('agents?select=*');
-    
-    // Calculate reputation and get review counts
+
     const agentsWithData = await Promise.all(
       agents.map(async (agent: any) => {
         const reviews = await supabaseRequest(`reviews?agent_id=eq.${agent.id}&select=score`);
-        const avgScore = reviews.length > 0 
-          ? reviews.reduce((sum: number, r: any) => sum + r.score, 0) / reviews.length 
+        const avgScore = reviews.length > 0
+          ? reviews.reduce((sum: number, r: any) => sum + r.score, 0) / reviews.length
           : null;
-        
-        // Reputation: 0-100 scale based on average (5-star max = 100)
         const reputationScore = avgScore ? Math.round(avgScore * 20) : 0;
-          
+
         return {
           id: agent.id,
           name: agent.name,
@@ -56,25 +54,17 @@ export async function GET(request: Request) {
         };
       })
     );
-    
-    // Sort by review count and average score
+
     const sorted = agentsWithData
       .sort((a: any, b: any) => {
-        // First by review count, then by average score
-        if (b.review_count !== a.review_count) {
-          return b.review_count - a.review_count;
-        }
+        if (b.review_count !== a.review_count) return b.review_count - a.review_count;
         return (b.average_score || 0) - (a.average_score || 0);
       })
       .slice(0, limit);
-    
+
     return NextResponse.json(sorted);
   } catch (error: any) {
     console.error('Leaderboard API Error:', error);
-    return NextResponse.json({ 
-      error: error.message,
-      urlConfigured: !!SUPABASE_URL,
-      keyConfigured: !!SUPABASE_ANON_KEY
-    }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
