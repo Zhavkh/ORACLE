@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 async function supabaseRequest(endpoint: string) {
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
@@ -45,10 +47,6 @@ export async function GET() {
     });
   } catch (error: any) {
     console.error('Stats API Error:', error);
-    return NextResponse.json({
-      error: error.message,
-      urlConfigured: !!process.env.SUPABASE_URL,
-      keyConfigured: !!process.env.SUPABASE_ANON_KEY
-    }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
