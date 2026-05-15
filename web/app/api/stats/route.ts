@@ -27,10 +27,8 @@ async function supabaseRequest(endpoint: string) {
 
 export async function GET() {
   try {
-    const [agents, reviews] = await Promise.all([
-      supabaseRequest('agents?select=id,is_verified'),
-      supabaseRequest('reviews?select=score'),
-    ]);
+    const agents = await supabaseRequest('agents?select=id,is_verified');
+    const reviews = await supabaseRequest('reviews?select=score');
 
     const totalAgents = agents.length;
     const verifiedAgents = agents.filter((a: any) => a.is_verified).length;
@@ -44,6 +42,7 @@ export async function GET() {
       total_reviews: totalReviews,
       verified_agents: verifiedAgents,
       average_rating: Math.round(avgRating * 10) / 10,
+      debug_agents_raw: agents,
     });
   } catch (error: any) {
     console.error('Stats API Error:', error);
