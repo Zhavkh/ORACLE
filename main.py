@@ -595,24 +595,40 @@ def get_reputation_history(agent_id: str):
     
     return [
         ReputationHistoryItem(
-            id=h["id"],
-            agent_id=h["agent_id"],
-            old_score=h.get("old_score"),
-            new_score=h.get("new_score"),
-            timestamp=h.get("timestamp"),
-            tx_hash=h.get("tx_hash")
-        )
-        for h in history
-    ]
-
-
 @app.post("/agents/{agent_id}/verify")
 def verify_agent(agent_id: str, body: VerifyRequest):
-    """Verify an agent by paying 0.1 NEAR"""
+    """Verify an agent by checking NEAR transaction"""
     if not _agent_exists(agent_id):
         raise HTTPException(status_code=404, detail="Agent not found")
-    
-    # Update agent to verified
+
+    if not body.tx_hash:
+        raise HTTPException(status_code=400, detail="Transaction hash required")
+
+    try:
+        payload = {
+            "jsonrpc": "2.0",
+            "id": "verify",
+            "method": "tx",
+            "params": [body.tx_hash, NEAR_CONTRACT_ID]
+        }
+        req = Request(
+            NEAR_RPC_URL,
+            data=json.dumps(payload).encode(),
+            headers={"Content-Type": "application/json"}
+        )
+        with urlopen(req, timeout=10) as response:
+            data = json.loads(response.read().decode())
+            if "error" in data:
+                raise HTTPException(status_code=400, detail="Invalid transaction hash")
+            result = data.get("result", {})
+            status = result.get("status", {})
+            if not status.get("SuccessValue") and not status.get("SuccessReceiptId"):
+                raise HTTPException(status_code=400, detail="Transaction failed or not found")
+    except HTTPException:
+        raise
+    except Exception:
+        raise HTTPException(status_code=400, detail="Could not verify transaction on NEAR")
+
     try:
         supabase_request(
             "agents",
@@ -622,15 +638,25 @@ def verify_agent(agent_id: str, body: VerifyRequest):
         )
     except HTTPException as e:
         if _is_missing_column(e, "agents.is_verified"):
-            raise HTTPException(status_code=400, detail="Database not migrated. Run SQL migration first.")
+            raise HTTPException(status_code=400, detail="Database not migrated.")
         raise
-    
-    # Log the verification in reputation history
+
     try:
         supabase_request(
             "reputation_history",
             method="POST",
             body={
+                "agent_id": agent_id,
+                "old_score": None,
+                "new_score": None,
+                "tx_hash": body.tx_hash
+            },
+            prefer="return=minimal"
+        )
+    except Exception:
+        pass
+
+    return {"ok": True, "agent_id": agent_id, "is_verified": True}
                 "agent_id": agent_id,
                 "old_score": None,
                 "new_score": None,
