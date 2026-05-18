@@ -36,7 +36,7 @@ export default function RootLayout({
             <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
               <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
                 <div className="text-sm text-zinc-500">
-                  © 2025 B7systems. All rights reserved.
+                  © 2026 B7systems. All rights reserved.
                 </div>
                 <nav className="flex items-center gap-5 text-sm text-zinc-400">
                   <a href="/about" className="transition-colors duration-200 hover:text-[#00ec97]">About</a>
