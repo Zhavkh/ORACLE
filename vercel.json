@@ -6,9 +6,7 @@
       "use": "@vercel/python",
       "config": {
         "maxDuration": 30,
-        "regions": [
-          "iad1"
-        ]
+        "regions": ["iad1"]
       }
     }
   ],
